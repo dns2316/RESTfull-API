@@ -3,7 +3,7 @@
 ![express](https://github.com/dns2316/RESTfull-API/blob/master/express.png)
 
 # RESTfull API
-	##Based on:
-*###Node.js
-*###MongoDB
-*###Express.js
+	## Based on:
+* ### Node.js
+* ### MongoDB
+* ### Express.js

@@ -2,4 +2,8 @@
 ![node](https://github.com/dns2316/RESTfull-API/blob/master/node.png)
 ![express](https://github.com/dns2316/RESTfull-API/blob/master/express.png)
 
-# RESTfull API: Node.js + MongoDB + Express.js
+# RESTfull API
+	##Based on:
+*###Node.js
+*###MongoDB
+*###Express.js

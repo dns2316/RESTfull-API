@@ -30,16 +30,17 @@ router.route('/articles')
     // create a article (accessed at POST http://localhost:8080/api/articles)
     .post(function(req, res) {
         console.log(req.body.title)
-        let article = new Article();      // create a new instance of the Article model
-        article.title = req.body.title;  // set the articles name (comes from the request)
+        let sendArticle = new Article({ // create a new instance of the Article model
+          title: req.body.title  // set the articles name (comes from the request
+        });
 
         // save the article and check for errors
-        article.save(function(err) {
+        sendArticle.save(function(err) {
             if (err){
               res.send(err);
+            } else {
+              res.json({ message: 'Article created!' });
             }
-
-            res.json({ message: 'Article created!' });
         });
 
     })

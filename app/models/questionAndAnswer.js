@@ -5,6 +5,7 @@ const AnswerShema = new Schema({
   author: { type: String, required: true },
   body: { type: String, required: true },
   date: { type: Date, default: Date.now },
+  modified: { type: Date, default: Date.now }, // not send to client
   comments: [{ body: String, date: Date }]
 });
 

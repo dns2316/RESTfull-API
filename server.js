@@ -52,6 +52,53 @@ router.route('/articles')
     })
   }); // posts
 
+router.route('/articles/:articles_id')
+  // get a article by articles_id (accessed at POST http://localhost:8080/api/articles/:id)
+  .get(function(req, res) {
+    Article.findById(req.params.articles_id, function(err, article) {
+      if(err) {
+        res.send(err);
+      } else {
+        res.json(article);
+      }
+    })
+  })
+  // update a article by articles_id (accessed at POST http://localhost:8080/api/articles/:id)
+  .put(function(req, res) {
+    Article.findById(req.params.articles_id, function(err, article) {
+      if(err) {
+        res.send(err);
+      } else {
+        article.title = req.body.title ? req.body.title : article.title,
+        article.author = req.body.author ? req.body.author : article.author,
+        article.body = req.body.body ? req.body.body : article.body,
+        article.images = req.body.images ? req.body.images : article.images,
+        article.comments = req.body.comments ? req.body.comments : article.comments,
+        article.modified = Date.now(),
+        article.hidden = req.body.hidden ? req.body.hidden : article.hidden
+      }
+
+        // save updated article and check for errors
+        article.save(function(err) {
+            if(err) {
+              res.send(err);
+            } else {
+              res.json({ message: 'Article updated!' });
+            }
+        });
+    })
+  })
+  //delete the article with this id
+  .delete(function(req, res) {
+    Article.remove({
+      _id: req.params.articles_id
+    }, function(err, article){
+      err? res.send(err):
+      res.json({ message: 'Successfully deleted article' })
+    })
+  })
+  // posts by id
+
 router.route('/qaa')
   // create a QuestionAndAnswer (accessed at POST http://localhost:8080/api/qaa)
   .post(function(req, res) {
@@ -83,6 +130,49 @@ router.route('/qaa')
       }
     })
   }) // questions and answers
+
+router.route('/qaa/:qaa_id')
+  // get a QuestionAndAnswer by qaa_id (accessed at POST http://localhost:8080/api/qaa/:id)
+  .get(function(req, res) {
+    QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
+      if(err) {
+        res.send(err);
+      } else {
+        res.json(qaa);
+      }
+    })
+  })
+  // update a qaa by qaa_id (accessed at POST http://localhost:8080/api/qaa/:id)
+  .put(function(req, res) {
+    QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
+      if(err) {
+        res.send(err);
+      } else {
+        qaa.answer = req.body.answer ? req.body.answer : qaa.answer,
+        qaa.answer.modified = Date.now(),
+        qaa.hidden = req.body.hidden ? req.body.comments : qaa.comments
+      }
+
+        // save updated article and check for errors
+        qaa.save(function(err) {
+            if(err) {
+              res.send(err);
+            } else {
+              res.json({ message: 'QuestionAndAnswer updated!' });
+            }
+        });
+    })
+  })
+  //delete the article with this id
+  .delete(function(req, res) {
+    QuestionAndAnswer.remove({
+      _id: req.params.qaa_id
+    }, function(err, article){
+      err? res.send(err):
+      res.json({ message: 'Successfully deleted QuestionAndAnswer' })
+    })
+  })
+  // QuestionAndAnswer by id
 
 app.use('/api', router);
 

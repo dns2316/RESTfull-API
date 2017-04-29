@@ -1,40 +1,20 @@
-const express = require('express')
+const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = express.Router();
+const log = require('./app/log')(module);
 
 const port = process.env.PORT || 8080;
 
 mongoose.connect('mongodb://localhost:27017/test');
 mongoose.Promise = require('bluebird');
 
-const log = require('./app/log')(module);
 const Article = require('./app/models/article');
 const QuestionAndAnswer = require('./app/models/questionAndAnswer');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.logger('dev')); // send log status to console
-app.use(function(req, res, next){
-    res.status(404);
-    log.debug('Not found URL: %s',req.url);
-    res.send({ error: 'Not found' });
-    return;
-}); // error 404
-app.use(function(err, req, res, next){
-    res.status(err.status || 500);
-    log.error('Internal error(%d): %s',res.statusCode,err.message);
-    res.send({ error: err.message });
-    return;
-}); // error 500
-
-// middleware to use for all requests. Лог когда делается запрос
-router.use(function(req, res, next) {
-    // do logging
-    console.log('Something is happening in this app');
-    next(); // make sure we go to the next routes and don't stop here
-});
 
 router.get('/', function(req, res) {
     res.json({ message: 'Welcome to API!' });
@@ -60,7 +40,6 @@ router.route('/articles')
             res.json({ message: 'Article created!' });
           }
       });
-
   })
 
   .get(function(req, res) {
@@ -71,7 +50,8 @@ router.route('/articles')
         res.json(articles);
       }
     })
-  }) // posts
+  }); // posts
+
 router.route('/qaa')
   // create a QuestionAndAnswer (accessed at POST http://localhost:8080/api/qaa)
   .post(function(req, res) {
@@ -92,11 +72,10 @@ router.route('/qaa')
             res.json({ message: 'QuestionAndAnswer created!' });
           }
       });
-
   })
 
   .get(function(req, res) {
-    Article.find(function(err, articles) {
+    QuestionAndAnswer.find(function(err, articles) {
       if(err) {
         res.send(err);
       } else {
@@ -110,6 +89,20 @@ app.use('/api', router);
 app.get('/', function (req, res) {
   res.send('Hello World!<br> This need will be put react app!!!<br> Or run react separately')
 })
+
+app.use(function(req, res, next){
+    res.status(404);
+    log.debug('Not found URL: %s',req.url);
+    res.send({ error: 'Not found' });
+    return;
+}); // error 404
+app.use(function(err, req, res, next){
+    res.status(err.status || 500);
+    log.error('Internal error(%d): %s',res.statusCode,err.message);
+    res.send({ error: err.message });
+    return;
+}); // error 500
+
 
 app.listen(port, function () {
   console.log('Example app listening on port ' + port + '!')

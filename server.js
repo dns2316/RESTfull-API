@@ -4,9 +4,12 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const config = require('./config');
+const oauth2 = require('./app/oauth2');
+const passport = require('passport');
 const _ = require('lodash');
 const log = require('./app/log')(module);
 const checkEmpyInArray = require('./app/deleteEmptyInArray');
+require('./app/oauth');
 
 mongoose.connect(config.get('mongoose:uri'));
 mongoose.Promise = require('bluebird');
@@ -24,6 +27,7 @@ const QuestionAndAnswer = require('./app/models/questionAndAnswer');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(passport.initialize());
 
 router.get('/', function(req, res) {
     res.json({ message: 'Welcome to API!' });
@@ -200,9 +204,21 @@ router.route('/qaa/:qaa_id')
 
 app.use('/api', router);
 
-app.get('/', function (req, res) {
-  res.send('Hello World!<br> This need will be put react app!!!<br> Or run react separately')
-})
+app
+  .get('/', function (req, res) {
+    res.send('Hello World!<br> This need will be put react app!!!<br> Or run react separately')
+  })
+  .get('/api/userInfo',
+    passport.authenticate('bearer', { session: false }),
+      function(req, res) {
+          // req.authInfo is set using the `info` argument supplied by
+          // `BearerStrategy`.  It is typically used to indicate scope of the token,
+          // and used in access control checks.  For illustrative purposes, this
+          // example simply returns the scope in the response.
+          res.json({ user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope })
+      }
+  )
+  .post('/oauth/token', oauth2.token);
 
 app.use(function(req, res, next){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
@@ -219,6 +235,38 @@ app.use(function(err, req, res, next){
     return;
 }); // error 500
 
+// example to add users and client
+  // const UserModel = require('./app/models/user');
+  // const ClientModel = require('./app/models/client');
+  // const AccessTokenModel = require('./app/models/accessToken');
+  // const RefreshTokenModel = require('./app/models/refreshToken');
+  // const faker = require('faker');
+  //
+  // UserModel.remove({}, function(err) {
+  //     var user = new UserModel({ username: "andrey", password: "simplepassword" });
+  //     user.save(function(err, user) {
+  //         if(err) return log.error(err);
+  //         else log.info("New user - %s:%s",user.username,user.password);
+  //     });
+  // });
+  //
+  // ClientModel.remove({}, function(err) {
+  //     var client = new ClientModel({ name: "OurService iOS client v1", clientId: "mobileV1", clientSecret:"abc123456" });
+  //     client.save(function(err, client) {
+  //         if(err) return log.error(err);
+  //         else log.info("New client - %s:%s",client.clientId,client.clientSecret);
+  //     });
+  // });
+  // AccessTokenModel.remove({}, function (err) {
+  //     if (err) return log.error(err);
+  // });
+  // RefreshTokenModel.remove({}, function (err) {
+  //     if (err) return log.error(err);
+  // });
+  //
+  // setTimeout(function() {
+  //     mongoose.disconnect();
+  // }, 3000);
 
 app.listen(config.get('port'), function () {
   console.log('App listening on port %s!', config.get('port'))

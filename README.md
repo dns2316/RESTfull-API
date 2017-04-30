@@ -16,9 +16,10 @@
 
 - [x] Create API: create, read, update, delete. (+ edit by id)
 - [x] Pass the firsts tests
-- [ ] Edit logger, connect to more events
-- [ ] Save logs to data base in log base
+- [x] Edit logger, connect to more events
+- [x] Save logs to data base in log base
 - [ ] To think about security. Oauth2, Passport.js
+- [ ] Need will be to read about Oauth2, Passport.js, and study this!
 
 ### List of references used at the time of writing this project:
 
@@ -26,4 +27,4 @@
 
 * [RESTful API на Node.js + MongoDB.](https://habrahabr.ru/post/193458) @_BenderRodriguez_. **Spt 12, 2013**
 
-P.S: CRUD (create, read, update, delete)
+> **_P.S: CRUD (create, read, update, delete)_**

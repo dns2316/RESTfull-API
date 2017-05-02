@@ -18,8 +18,8 @@
 - [x] Pass the firsts tests
 - [x] Edit logger, connect to more events
 - [x] Save logs to data base in log base
-- [ ] To think about security. Oauth2, Passport.js
-- [ ] Need will be to read about Oauth2, Passport.js, and study this!
+- [x] To think about security. Oauth2, Passport.js
+- [x] Need will be to read about Oauth2, Passport.js, and study this!
 
 ### List of references used at the time of writing this project:
 

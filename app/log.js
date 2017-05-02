@@ -1,6 +1,7 @@
 const winston = require('winston');
-const winstonToMongo = require('winston-mongodb').MongoDB;
-const moment = require('moment');
+          winstonToMongo = require('winston-mongodb').MongoDB,
+          moment = require('moment'),
+          config = require('../config');
 
 const winstonColors = {
   debug: "cyan"
@@ -27,7 +28,7 @@ function getLogger(module) {
               }
           }),
           new winstonToMongo({
-              db : 'mongodb://localhost:27017/test',
+              db : config.get('mongoose:uri'),
               collection: 'logs'
           })
       ]

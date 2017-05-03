@@ -5,31 +5,31 @@ const express = require('express'),
 
 const QuestionAndAnswer = require('../app/models/questionAndAnswer');
 
-router.route('/', passport.authenticate('bearer', { session: false }))
-  // create a QuestionAndAnswer (accessed at POST http://localhost:8080/api/qaa)
-  .post(function(req, res) {
-      const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
-      let sendQuestionAndAnswer = new QuestionAndAnswer({ // create a new instance of the QuestionAndAnswer model
-        title: req.body.title,
-        author: req.body.author,
-        body: req.body.body,
-        answer: req.body.answer,
-        comments: req.body.comments,
-        hidden: req.body.hidden
-      });
+router.post('/', passport.authenticate('bearer', { session: false }),
+  function(req, res){
+    const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
+    let sendQuestionAndAnswer = new QuestionAndAnswer({ // create a new instance of the QuestionAndAnswer model
+      title: req.body.title,
+      author: req.body.author,
+      body: req.body.body,
+      answer: req.body.answer,
+      comments: req.body.comments,
+      hidden: req.body.hidden
+    });
 
-      // save the QuestionAndAnswer and check for errors
-      sendQuestionAndAnswer.save(function(err) {
-          if(err) {
-            res.send(err);
-          } else {
-            log.info('Create Question: %s %s', sendQuestionAndAnswer.title, ipLogger)
-            res.json({ message: 'QuestionAndAnswer created!' });
-          }
-      });
-  })
+    // save the QuestionAndAnswer and check for errors
+    sendQuestionAndAnswer.save(function(err) {
+        if(err) {
+          res.send(err);
+        } else {
+          log.info('Create Question: %s %s', sendQuestionAndAnswer.title, ipLogger)
+          res.json({ message: 'QuestionAndAnswer created!' });
+        }
+    })
+}); // add question
 
-  .get(function(req, res) {
+router.get('/', passport.authenticate('bearer', { session: false }),
+  function(req, res){
     QuestionAndAnswer.find(function(err, articles) {
       if(err) {
         res.send(err);
@@ -37,11 +37,10 @@ router.route('/', passport.authenticate('bearer', { session: false }))
         res.json(articles);
       }
     })
-  }) // questions and answers
+}); // read questions and answers
 
-router.route('/:qaa_id', passport.authenticate('bearer', { session: false }))
-  // get a QuestionAndAnswer by qaa_id (accessed at POST http://localhost:8080/api/qaa/:id)
-  .get(function(req, res) {
+router.get('/:qaa_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
     QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
       if(err) {
         res.send(err);
@@ -49,9 +48,10 @@ router.route('/:qaa_id', passport.authenticate('bearer', { session: false }))
         res.json(qaa);
       }
     })
-  })
-  // update a qaa by qaa_id (accessed at PUT http://localhost:8080/api/qaa/:id)
-  .put(function(req, res) {
+}); // read questions and answers by id
+
+router.put('/:qaa_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
       if(err) {
@@ -72,9 +72,10 @@ router.route('/:qaa_id', passport.authenticate('bearer', { session: false }))
             }
         });
     })
-  })
-  //delete the article with this id
-  .delete(function(req, res) {
+}); // update questions and answers by id
+
+router.delete('/:qaa_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     QuestionAndAnswer.remove({
       _id: req.params.qaa_id
@@ -83,7 +84,6 @@ router.route('/:qaa_id', passport.authenticate('bearer', { session: false }))
       log.info('Delete QuestionAndAnswer: %s %s', question.title, ipLogger)
       res.json({ message: 'Successfully deleted QuestionAndAnswer' })
     })
-  })
-  // QuestionAndAnswer by id
+}); // delete questions and answers by id
 
 module.exports = router;

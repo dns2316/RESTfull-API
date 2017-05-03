@@ -6,31 +6,31 @@ const express = require('express'),
 
 const Article = require('../app/models/article');
 
-router.route('/', passport.authenticate('bearer', { session: false }))
-  // create a article (accessed at POST http://localhost:8080/api/articles)
-  .post(function(req, res) {
-      const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
-      let sendArticle = new Article({ // create a new instance of the Article model
-        title: req.body.title,
-        author: req.body.author,
-        body: req.body.body,
-        images: req.body.images,
-        comments: req.body.comments,
-        hidden: req.body.hidden
-      });
+router.post('/', passport.authenticate('bearer', { session: false }),
+  function(req, res){
+    const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
+    let sendArticle = new Article({ // create a new instance of the Article model
+      title: req.body.title,
+      author: req.body.author,
+      body: req.body.body,
+      images: req.body.images,
+      comments: req.body.comments,
+      hidden: req.body.hidden
+    });
 
-      // save the article and check for errors
-      sendArticle.save(function(err) {
-          if(err) {
-            res.send(err);
-          } else {
-            log.info('Create article: %s %s', sendArticle.title, ipLogger)
-            res.json({ message: 'Article created!' });
-          }
-      });
-  })
+    // save the article and check for errors
+    sendArticle.save(function(err) {
+      if(err) {
+        res.send(err);
+      } else {
+        log.info('Create article: %s %s', sendArticle.title, ipLogger)
+        res.json({ message: 'Article created!' });
+      }
+  });
+}); // add article
 
-  .get(function(req, res) {
+router.get('/', passport.authenticate('bearer', { session: false }),
+  function(req, res){
     Article.find(function(err, articles) {
       if(err) {
         res.send(err);
@@ -38,11 +38,10 @@ router.route('/', passport.authenticate('bearer', { session: false }))
         res.json(articles);
       }
     })
-  }); // posts
+}); // read articles
 
-  router.route('/:articles_id', passport.authenticate('bearer', { session: false }))
-    // get a article by articles_id (accessed at GET http://localhost:8080/api/articles/:id)
-    .get(function(req, res) {
+router.get('/:articles_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
       Article.findById(req.params.articles_id, function(err, article) {
         if(err) {
           res.send(err);
@@ -50,9 +49,10 @@ router.route('/', passport.authenticate('bearer', { session: false }))
           res.json(article);
         }
       })
-    })
-    // update a article by articles_id (accessed at PUT http://localhost:8080/api/articles/:id)
-    .put(function(req, res) {
+}); // get a article by articles_id
+
+router.put('/:articles_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
       const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
       let updateToLogger = []; // mb will edit (push to different columns or array)
       Article.findById(req.params.articles_id, function(err, article) {
@@ -80,18 +80,18 @@ router.route('/', passport.authenticate('bearer', { session: false }))
               }
           });
       })
+    }); // update article with id
+
+router.delete('/:articles_id', passport.authenticate('bearer', { session: false }),
+  function(req, res){
+    const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
+    Article.remove({
+      _id: req.params.articles_id
+    }, function(err, article){
+      err? res.send(err):
+      log.info('Delete article: %s %s', article.title, ipLogger)
+      res.json({ message: 'Successfully deleted article' })
     })
-    //delete the article with this id
-    .delete(function(req, res) {
-      const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
-      Article.remove({
-        _id: req.params.articles_id
-      }, function(err, article){
-        err? res.send(err):
-        log.info('Delete article: %s %s', article.title, ipLogger)
-        res.json({ message: 'Successfully deleted article' })
-      })
-    })
-    // posts by id
+  }); // delete article by id
 
 module.exports = router;

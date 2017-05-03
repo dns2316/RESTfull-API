@@ -20,6 +20,7 @@ function getLogger(module) {
               timestamp: function() {
                 return moment().format("DD-MM-YYYY HH:mm:ss.SSS");
               },
+              handleException: true,
               level: 'debug',
               label: path,
               formatter: function(options) {
@@ -27,12 +28,23 @@ function getLogger(module) {
                     (options.meta && Object.keys(options.meta).length ? ' [META:'+ JSON.stringify(options.meta) +']' : '' );
               }
           }),
-          new winstonToMongo({
-              db : config.get('mongoose:uri'),
-              collection: 'logs'
+          new winston.transports.File({
+              level: 'info',
+              filename: process.cwd() + '/logs/all.json',
+              handleException: true,
+              json: true,
+              maxSize: 5242880, //5mb
+              maxFiles: 3,
+              colorize: false
           })
-      ]
+      ],
+      exitOnError: false
   })
+}
+
+function getFilePath (module ) {
+    //using filename in log statements
+    return module.filename.split('/').slice(-2).join('/');
 }
 
 module.exports = getLogger;

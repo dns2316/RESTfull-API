@@ -1,9 +1,23 @@
 {
-    "port" : 1337,
+    "port" : 1437,
     "security": {
       "tokenLife" : 3600
     },
     "mongoose": {
-      "uri": "mongodb://localhost/test"
+      "uri": "mongodb://localhost/testDB4react"
+    },
+    "default": {
+        "api": {
+            "version" : "v1"
+        },
+        "user": {
+            "username": "api4react",
+            "password": "pass123"
+        },
+        "client": {
+            "name": "react API v1",
+            "clientId": "webReact",
+            "clientSecret": "SomeRandomCharsAndNumbers"
+        }
     }
 }

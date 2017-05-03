@@ -12,7 +12,9 @@ const express = require('express'),
 require('./app/oauth');
 
 const articlesRoute = require('./routes/articles'),
-          QuestionAndAnswerRoute = require('./routes/qaa');
+          QuestionAndAnswerRoute = require('./routes/qaa'),
+          oauth2Route = require('./routes/oauth2Route'),
+          api = require('./routes/api');
 
 mongoose.connect(config.get('mongoose:uri'));
 mongoose.Promise = require('bluebird');
@@ -31,13 +33,11 @@ app.use(passport.initialize());
 app.use(cookieParser());
 app.set('port', process.env.PORT || config.get('port') || 3000);
 
-router.get('/', function(req, res) {
-    res.json({ message: 'Welcome to API!' });
-});
-
+app.use('/', api);
+app.use('/api', api);
 app.use('/api/articles', articlesRoute);
+app.use('/api/token', oauth2Route);
 app.use('/api/qaa', QuestionAndAnswerRoute);
-app.use('/api/oauth/token', oauth2.token);
 
 app.use(function(req, res, next){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;

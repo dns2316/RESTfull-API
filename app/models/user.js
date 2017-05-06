@@ -8,6 +8,11 @@ const UserShema = new Schema({
         unique: true,
         required: true
     },
+    email: {
+        type: String,
+        unique: true,
+        required: true
+    },
     hashedPassword: {
         type: String,
         required: true

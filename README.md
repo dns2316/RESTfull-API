@@ -20,6 +20,7 @@
 - [x] Save logs to data base in log base
 - [x] To think about security. Oauth2, Passport.js
 - [x] Need will be to read about Oauth2, Passport.js, and study this!
+- [ ] Add authorization
 
 ### List of references used at the time of writing this project:
 

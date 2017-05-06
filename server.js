@@ -14,6 +14,9 @@ require('./app/oauth');
 const articlesRoute = require('./routes/articles'),
           QuestionAndAnswerRoute = require('./routes/qaa'),
           oauth2Route = require('./routes/oauth2Route'),
+          registerRoute = require('./routes/register'),
+          logoutRoute = require('./routes/logout'),
+          loginRoute = require('./routes/login'),
           api = require('./routes/api');
 
 mongoose.connect(config.get('mongoose:uri'));
@@ -35,8 +38,11 @@ app.set('port', process.env.PORT || config.get('port') || 3000);
 
 app.use('/', api);
 app.use('/api', api);
+app.use('/login', loginRoute);
+app.use('/logout', logoutRoute);
+app.use('/register', registerRoute);
+app.use('/token', oauth2Route);
 app.use('/api/articles', articlesRoute);
-app.use('/api/token', oauth2Route);
 app.use('/api/qaa', QuestionAndAnswerRoute);
 
 app.use(function(req, res, next){

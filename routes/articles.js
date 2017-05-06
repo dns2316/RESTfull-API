@@ -29,8 +29,7 @@ router.post('/', passport.authenticate('bearer', { session: false }),
   });
 }); // add article
 
-router.get('/', passport.authenticate('bearer', { session: false }),
-  function(req, res){
+router.get('/', function(req, res){
     Article.find(function(err, articles) {
       if(err) {
         res.send(err);

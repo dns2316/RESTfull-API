@@ -3,7 +3,7 @@ const passport = require('passport');
 const crypto = require('crypto');
 const config = require('../config');
 const UserModel = require('./models/user');
-const ClientModel = require('./models/client');
+// const ClientModel = require('./models/client');
 const AccessTokenModel = require('./models/accessToken');
 const RefreshTokenModel = require('./models/refreshToken');
 
@@ -75,7 +75,8 @@ server.exchange(oauth2orize.exchange.refreshToken(function(client, refreshToken,
 
 // token endpoint
 exports.token = [
-    passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+  // passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+    passport.authenticate(['basic'], { session: false }),
     server.token(),
     server.errorHandler()
 ]

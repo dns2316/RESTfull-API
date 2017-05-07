@@ -5,7 +5,7 @@ const express = require('express'),
 
 const QuestionAndAnswer = require('../app/models/questionAndAnswer');
 
-router.post('/', passport.authenticate('bearer', { session: false }),
+router.post('/', passport.authenticate('basic', { session: false }),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     let sendQuestionAndAnswer = new QuestionAndAnswer({ // create a new instance of the QuestionAndAnswer model
@@ -28,7 +28,7 @@ router.post('/', passport.authenticate('bearer', { session: false }),
     })
 }); // add question
 
-router.get('/', passport.authenticate('bearer', { session: false }),
+router.get('/', passport.authenticate('basic', { session: false }),
   function(req, res){
     QuestionAndAnswer.find(function(err, articles) {
       if(err) {
@@ -39,7 +39,7 @@ router.get('/', passport.authenticate('bearer', { session: false }),
     })
 }); // read questions and answers
 
-router.get('/:qaa_id', passport.authenticate('bearer', { session: false }),
+router.get('/:qaa_id', passport.authenticate('basic', { session: false }),
   function(req, res){
     QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
       if(err) {
@@ -50,7 +50,7 @@ router.get('/:qaa_id', passport.authenticate('bearer', { session: false }),
     })
 }); // read questions and answers by id
 
-router.put('/:qaa_id', passport.authenticate('bearer', { session: false }),
+router.put('/:qaa_id', passport.authenticate('basic', { session: false }),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
@@ -74,7 +74,7 @@ router.put('/:qaa_id', passport.authenticate('bearer', { session: false }),
     })
 }); // update questions and answers by id
 
-router.delete('/:qaa_id', passport.authenticate('bearer', { session: false }),
+router.delete('/:qaa_id', passport.authenticate('basic', { session: false }),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     QuestionAndAnswer.remove({

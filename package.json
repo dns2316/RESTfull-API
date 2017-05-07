@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "start": "set VK_APP_ID=123 && set VK_APP_SECRET=123 && node server.js"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
@@ -21,6 +21,7 @@
     "passport-http": "^0.3.0",
     "passport-http-bearer": "^1.0.1",
     "passport-oauth2-client-password": "^0.1.2",
+    "passport-vkontakte": "^0.3.2",
     "serve-favicon": "~2.4.2",
     "winston": "^2.3.1",
     "winston-mongodb": "^2.0.9"

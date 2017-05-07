@@ -6,7 +6,7 @@ const express = require('express'),
 
 const Article = require('../app/models/article');
 
-router.post('/', passport.authenticate('bearer', { session: false }),
+router.post('/', passport.authenticate('basic', { session: false }),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     let sendArticle = new Article({ // create a new instance of the Article model
@@ -39,7 +39,7 @@ router.get('/', function(req, res){
     })
 }); // read articles
 
-router.get('/:articles_id', passport.authenticate('bearer', { session: false }),
+router.get('/:articles_id', passport.authenticate('basic', { session: false }),
   function(req, res){
       Article.findById(req.params.articles_id, function(err, article) {
         if(err) {
@@ -50,7 +50,7 @@ router.get('/:articles_id', passport.authenticate('bearer', { session: false }),
       })
 }); // get a article by articles_id
 
-router.put('/:articles_id', passport.authenticate('bearer', { session: false }),
+router.put('/:articles_id', passport.authenticate('basic', { session: false }),
   function(req, res){
       const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
       let updateToLogger = []; // mb will edit (push to different columns or array)
@@ -81,7 +81,7 @@ router.put('/:articles_id', passport.authenticate('bearer', { session: false }),
       })
     }); // update article with id
 
-router.delete('/:articles_id', passport.authenticate('bearer', { session: false }),
+router.delete('/:articles_id', passport.authenticate('basic', { session: false }),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     Article.remove({

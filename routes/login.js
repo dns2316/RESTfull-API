@@ -6,17 +6,17 @@ router = express.Router();
 
 
 router.post('/', function(req, res){
-  passport.authenticate('bearer',
-    function(err, user, info) {
+  passport.authenticate('basic',
+    function(err, user) {
       return err
         ? log.error(err)
         : user
           ? req.logIn(user, function(err) {
               return err
                 ? log.error(err)
-                : res.redirect('/api/articles');
+                : res.redirect('/');
             })
-          : res.redirect('/');
+          : res.redirect('/login');
     }
   )(req, res);
 });

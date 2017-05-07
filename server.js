@@ -4,16 +4,14 @@ const express = require('express'),
           bodyParser = require('body-parser'),
           router = express.Router(),
           config = require('./config'),
-          oauth2 = require('./app/oauth2'),
           passport = require('passport'),
           cookieParser = require('cookie-parser'),
           log = require('./app/log')(module),
           checkEmpyInArray = require('./app/deleteEmptyInArray');
-require('./app/oauth');
+require('./app/passport-http');
 
 const articlesRoute = require('./routes/articles'),
           QuestionAndAnswerRoute = require('./routes/qaa'),
-          oauth2Route = require('./routes/oauth2Route'),
           registerRoute = require('./routes/register'),
           logoutRoute = require('./routes/logout'),
           loginRoute = require('./routes/login'),
@@ -36,12 +34,34 @@ app.use(passport.initialize());
 app.use(cookieParser());
 app.set('port', process.env.PORT || config.get('port') || 3000);
 
-app.use('/', api);
+app.get('/',
+  passport.authenticate('basic', { session: false }),
+  function(req, res){
+    res.json({ username: req.user.username, email: req.user.email })
+  }
+);
+app.get('/auth/vk',
+  passport.authenticate('vkontakte'),
+  function(req, res){
+    // The request will be redirected to VK for authentication, so this
+    // function will not be called.
+});
+
+// GET /auth/vk/callback
+//   Use passport.authenticate() as route middleware to authenticate the
+//   request.  If authentication fails, the user will be redirected back to the
+//   login page.  Otherwise, the primary route function function will be called,
+//   which, in this example, will redirect the user to the home page.
+app.get('/auth/vk/callback',
+  passport.authenticate('vkontakte', { failureRedirect: '/login' }),
+  function(req, res) {
+    res.redirect('/');
+});
+
 app.use('/api', api);
 app.use('/login', loginRoute);
 app.use('/logout', logoutRoute);
 app.use('/register', registerRoute);
-app.use('/token', oauth2Route);
 app.use('/api/articles', articlesRoute);
 app.use('/api/qaa', QuestionAndAnswerRoute);
 

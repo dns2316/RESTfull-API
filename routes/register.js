@@ -5,20 +5,29 @@ router = express.Router();
 
 require('passport');
 
-router.post('/', function(req, res){
+router.post('/', function(req, res, next){
   const user = new User({
     username: req.body.username,
     password: req.body.password,
     email: req.body.email
   });
   user.save(function(err) {
-    return err
-      ? log.error(err)
-      : req.logIn(user, function(err) {
-        return err
-          ? log.error(err)
-          : res.redirect('/private');
-      });
+    if(err){
+      res.json(err);
+      return log.error(err)
+    } else{
+      res.json('Register successful');
+      return res.redirect('/')
+    }
+
+    // req.logIn(user, function(err) {
+    //   if(err){
+    //     log.error(err);
+    //     res.json(err);
+    //   } else {
+    //     return res.redirect('/')
+    //   }
+    // });
   });
 });
 module.exports = router;

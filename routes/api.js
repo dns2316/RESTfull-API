@@ -3,7 +3,7 @@ const express = require('express'),
           router = express.Router();
 
 /* GET users listing. */
-router.get('/', passport.authenticate('bearer', { session: false }), function (req, res) {
+router.get('/', passport.authenticate('basic', { session: false }), function (req, res) {
     res.json({
     	msg: 'API is running'
     });

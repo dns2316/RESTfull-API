@@ -13,7 +13,7 @@ const Schema = mongoose.Schema;
 const ArticleShema   = new Schema({
   title: { type: String, required: true },
   author: { type: String, required: true },
-  // images: [ImagesShema],
+  image: { type: String, required: true }, // url
   images: { type: String, required: true }, // url
   body: { type: String, required: true },
   date: { type: Date, default: Date.now }, // not send to client

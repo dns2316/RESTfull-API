@@ -536,6 +536,10 @@ oauth2orize@^1.8.0:
     uid2 "0.0.x"
     utils-merge "1.x.x"
 
+oauth@0.9.x:
+  version "0.9.15"
+  resolved "https://registry.yarnpkg.com/oauth/-/oauth-0.9.15.tgz#bd1fefaf686c96b75475aed5196412ff60cfb9c1"
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"
@@ -580,9 +584,24 @@ passport-oauth2-client-password@^0.1.2:
   dependencies:
     passport-strategy "1.x.x"
 
+passport-oauth2@1.3.x:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/passport-oauth2/-/passport-oauth2-1.3.0.tgz#d72b4bd62eeb807a4089ff3071a22c26c382dc0c"
+  dependencies:
+    oauth "0.9.x"
+    passport-strategy "1.x.x"
+    uid2 "0.0.x"
+
 passport-strategy@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-strategy/-/passport-strategy-1.0.0.tgz#b5539aa8fc225a3d1ad179476ddf236b440f52e4"
+
+passport-vkontakte@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/passport-vkontakte/-/passport-vkontakte-0.3.2.tgz#a2a75af96466936b375fca958fd57bc10e1fea92"
+  dependencies:
+    passport-oauth2 "1.3.x"
+    pkginfo "0.2.x"
 
 passport@^0.3.2:
   version "0.3.2"
@@ -598,6 +617,10 @@ path-to-regexp@0.1.7:
 pause@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/pause/-/pause-0.0.1.tgz#1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d"
+
+pkginfo@0.2.x:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/pkginfo/-/pkginfo-0.2.3.tgz#7239c42a5ef6c30b8f328439d9b9ff71042490f8"
 
 process-nextick-args@~1.0.6:
   version "1.0.7"

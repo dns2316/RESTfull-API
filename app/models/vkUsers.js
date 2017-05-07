@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserShema = new Schema({
-    username: {
+const vkUserShema = new Schema({
+    vkontakteId: {
         type: String,
         unique: true,
         required: true
@@ -10,11 +10,11 @@ const UserShema = new Schema({
     email: {
         type: String,
         unique: true,
-        required: true
+        // required: true
     },
     password: {
         type: String,
-        required: true
+        // required: true
     },
     created: {
         type: Date,
@@ -22,9 +22,4 @@ const UserShema = new Schema({
     }
 });
 
-UserShema.virtual('userId')
-    .get(function () {
-        return this.id;
-    });
-
-module.exports = mongoose.model('User', UserShema);
+module.exports = mongoose.model('vkUser', vkUserShema);

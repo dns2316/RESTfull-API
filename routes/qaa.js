@@ -5,16 +5,13 @@ const express = require('express'),
 
 const QuestionAndAnswer = require('../app/models/questionAndAnswer');
 
-router.post('/', passport.authenticate('basic', { session: false }),
+router.post('/', passport.authenticate('vkontakte'),
   function(req, res){
     const ipLogger = '| ip: ' +req.ip + ' | ips: ' + req.ips;
     let sendQuestionAndAnswer = new QuestionAndAnswer({ // create a new instance of the QuestionAndAnswer model
       title: req.body.title,
       author: req.body.author,
-      body: req.body.body,
-      answer: req.body.answer,
-      comments: req.body.comments,
-      hidden: req.body.hidden
+      body: req.body.body
     });
 
     // save the QuestionAndAnswer and check for errors
@@ -28,7 +25,7 @@ router.post('/', passport.authenticate('basic', { session: false }),
     })
 }); // add question
 
-router.get('/', passport.authenticate('basic', { session: false }),
+router.get('/',
   function(req, res){
     QuestionAndAnswer.find(function(err, articles) {
       if(err) {
@@ -39,7 +36,7 @@ router.get('/', passport.authenticate('basic', { session: false }),
     })
 }); // read questions and answers
 
-router.get('/:qaa_id', passport.authenticate('basic', { session: false }),
+router.get('/:qaa_id',
   function(req, res){
     QuestionAndAnswer.findById(req.params.qaa_id, function(err, qaa) {
       if(err) {
@@ -72,7 +69,7 @@ router.put('/:qaa_id', passport.authenticate('basic', { session: false }),
             }
         });
     })
-}); // update questions and answers by id
+}); // send answer to question by id
 
 router.delete('/:qaa_id', passport.authenticate('basic', { session: false }),
   function(req, res){

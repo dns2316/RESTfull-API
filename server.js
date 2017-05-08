@@ -35,25 +35,17 @@ app.use(cookieParser());
 app.set('port', process.env.PORT || config.get('port') || 3000);
 
 app.get('/',
-  passport.authenticate('basic', { session: false }),
   function(req, res){
-    res.json({ username: req.user.username, email: req.user.email })
+    res.send('hello!')
   }
 );
 app.get('/auth/vk',
   passport.authenticate('vkontakte'),
   function(req, res){
-    // The request will be redirected to VK for authentication, so this
-    // function will not be called.
 });
 
-// GET /auth/vk/callback
-//   Use passport.authenticate() as route middleware to authenticate the
-//   request.  If authentication fails, the user will be redirected back to the
-//   login page.  Otherwise, the primary route function function will be called,
-//   which, in this example, will redirect the user to the home page.
 app.get('/auth/vk/callback',
-  passport.authenticate('vkontakte', { failureRedirect: '/login' }),
+  passport.authenticate('vkontakte', { failureRedirect: '/auth/vk' }),
   function(req, res) {
     res.redirect('/');
 });

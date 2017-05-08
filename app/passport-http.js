@@ -1,6 +1,7 @@
 const passport = require('passport');
 const Strategy = require('passport-http').BasicStrategy;
 const UserModel = require('./models/user');
+const UserModelVk = require('./models/vkUsers');
 const mongoose = require('mongoose');
 const VKontakteStrategy = require('passport-vkontakte').Strategy;
 
@@ -22,24 +23,35 @@ passport.use(new Strategy(
   }
 ))
 
-passport.use(new VKontakteStrategy(
-  {
-    clientID: VK_APP_ID, // VK.com docs call it 'API ID', 'app_id', 'api_id', 'client_id' or 'apiId'
+passport.use(new VKontakteStrategy({
+    clientID: VK_APP_ID,
     clientSecret: VK_APP_SECRET,
-    callbackURL:  "http://localhost:3000/auth/vkontakte/callback",
-    scope: ['email'],
-    profileFields: ['email']
+    callbackURL:  "http://localhost:1437/auth/vk/callback",
+    scope: ['email', 'friends'],
+    profileFields: ['email', 'friends']
   },
-  function verifyCallback(accessToken, refreshToken, params, profile, done) {
-
-    // Now that we have user's `profile` as seen by VK, we can
-    // use it to find corresponding database records on our side.
-    // Also we have user's `params` that contains email address (if set in
-    // scope), token lifetime, etc.
-    // Here, we have a hypothetical `User` class which does what it says.
-    User.findOrCreate({ vkontakteId: profile.id })
-        .then(function (user) { done(null, user); })
-        .catch(done);
+  function(accessToken, refreshToken, params, profile, done) {
+    UserModelVk.findOne({vkontakteId: profile.id}, function(err, user){
+      if(err){ return done(err) }
+      if(!user){
+        const user = new UserModelVk({
+          vkontakteId: profile.id,
+          name: profile.displayName,
+          gender: profile.gender,
+          photo: profile.photos[0].value,
+          email: params.email,
+          friends: params.friends,
+          info: profile._json
+        })
+        user.save(function(err) {
+          if (err) console.log(err);
+          log.info('Was add user from vk: %s. id user: %s', user.name, user.vkontakteId)
+          return done(err, user);
+        });
+      } else {
+        return done(err, user);
+      }
+    })
   }
 ))
 

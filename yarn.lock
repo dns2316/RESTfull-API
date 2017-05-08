@@ -447,6 +447,10 @@ mongodb@2.2.26, mongodb@^2.2.19:
     mongodb-core "2.1.10"
     readable-stream "2.2.7"
 
+mongoose-findorcreate@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mongoose-findorcreate/-/mongoose-findorcreate-1.0.1.tgz#8a5bb9fdcf4207bbb91e2fc5489bccef2bc51e98"
+
 mongoose@^4.9.6:
   version "4.9.6"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-4.9.6.tgz#8485879893a33fe4b8c8b596950cfa9a8d597ec1"
